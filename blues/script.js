@@ -1,3 +1,5 @@
+"use strict"
+
 var a = Math.pow(2, 1/12);
 
 var bgPlaying = false;
@@ -19,7 +21,8 @@ var lead = new Tone.MonoSynth({
 lead.portamento = .05; //gliiiide
 
 var bass = new Tone.SimpleAM().toMaster();
-bass.carrier.envelope.attack.value = 0;
+bass.set("carrier.envelope.attack", 0);
+bass.volume.value = 10;
 
 //drums
 var kick = new Tone.DrumSynth().toMaster();
