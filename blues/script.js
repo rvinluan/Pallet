@@ -52,28 +52,27 @@ function scheduleBasicBeat() {
 }
 
 function twelveBarBlues() {
-  var progression = ["C7", "C7", "C7", "C7", "F7", "F7", "F7", "F7", "G7", "F7", "C7", "C7"];
+  var progression = ["C7", "C7", "C7", "C7", "F7", "F7", "C7", "C7", "G7", "F7", "C7", "C7"];
   for(var i = 0; i < progression.length; i++) {
     let chord = teoria.chord(progression[i]),
       chordNotes = chord.simple();
     Tone.Transport.schedule(function (time) {
-      
+  
       for(var j = 0; j < chordNotes.length; j++) {
         pads.triggerAttackRelease(chordNotes[j] + "4", "2n");
       }
-
 
     }, i + "m");
   }
 }
 
 function twelveBarBluesBass() {
-  var progression = ["C7", "C7", "C7", "C7", "F7", "F7", "F7", "F7", "G7", "F7", "C7", "C7"],
+  var progression = ["C7", "C7", "C7", "C7", "F7", "F7", "C7", "C7", "G7", "F7", "C7", "C7"],
       twoBarPattern = [1, 3, 5, 6, 7, 6, 5, 3],
       oneBarPattern = [1, 3, 5, 6];
   for(var i = 0; i < progression.length; i++) {
     let chord = teoria.chord(progression[i]),
-        root = chord.notes()[0],
+        root = teoria.note.fromString(chord.notes()[0].name() + "2"),
         mixolydian = teoria.scale(root, "mixolydian"),
         p = twoBarPattern;
     if(i == 8 || i == 9) {
@@ -83,8 +82,8 @@ function twelveBarBluesBass() {
     }
     Tone.Transport.schedule(function (time) {
       for(var j = 0; j < p.length; j++) {
-        let note = mixolydian.simple()[p[j]-1];
-        bass.triggerAttackRelease(note + "2", "4n", "+4n*"+j);
+        let note = mixolydian.get(p[j]).toString(false);
+        bass.triggerAttackRelease(note, "4n", "+4n*"+j);
       }
     }, i + "m");
   }
