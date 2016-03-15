@@ -29,21 +29,24 @@ var kick = new Tone.DrumSynth().toMaster();
 var snare = new Tone.NoiseSynth().toMaster();
 var hihat = new Tone.NoiseSynth().toMaster();
 
-snare.filter.frequency.value = 1000;
-snare.filter.Q.value = 10;
+snare.envelope.decay = .3;
+snare.filter.frequency.value = 0;
+
+hihat.filter.frequency.value = 100;
 
 Tone.Transport.timeSignature = 4;
 Tone.Transport.loop = true;
 Tone.Transport.loopEnd = "12m";
 Tone.Transport.bpm.value = 144;
+Tone.Transport.swing = 1;
 
 function scheduleBasicBeat() {
   for(var i = 0; i < 12; i++) {
     Tone.Transport.schedule(function (time) {
       kick.triggerAttackRelease("C2", "8n", time);
-      hihat.triggerAttackRelease("16n", "+4n");
-      snare.triggerAttackRelease("4n", "+4n + 4n");
-      hihat.triggerAttackRelease("16n", "+4n + 4n + 4n");
+      snare.triggerAttackRelease("16n", "+4n");
+      hihat.triggerAttackRelease("4n", "+4n + 4n");
+      snare.triggerAttackRelease("16n", "+4n + 4n + 4n");
     }, i + "m");
   }
 }
@@ -98,12 +101,15 @@ document.body.addEventListener("keydown", function (e) {
   var degree = instrumentKeys.indexOf(e.which);
   if(degree != -1) {
     var octave = 3 + Math.floor(degree/6);
-    lead.triggerAttack(playableScale.simple()[degree % 6] + octave);
+    currentLeadNote = playableScale.simple()[degree % 6] + octave;
+    leadPlaying = true;
   }
+  lead.triggerAttackRelease(currentLeadNote);
 })
 
 document.body.addEventListener("keyup", function (e) {
   lead.triggerRelease()
+  leadPlaying = false;
 })
 
 Tone.Transport.start();
