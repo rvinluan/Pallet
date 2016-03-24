@@ -103,7 +103,7 @@ document.body.addEventListener("keydown", function (e) {
     currentLeadNote = playableScale.simple()[degree % 6] + octave;
     leadPlaying = true;
   }
-  lead.triggerAttackRelease(currentLeadNote);
+  lead.triggerAttack(currentLeadNote);
 })
 
 document.body.addEventListener("keyup", function (e) {
